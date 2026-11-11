@@ -1,0 +1,12 @@
+# generated themes (can be tens of MB; publish them as release assets instead)
+dist/
+build/
+*.partial/
+.*.partial/
+preview.png
+
+# python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/

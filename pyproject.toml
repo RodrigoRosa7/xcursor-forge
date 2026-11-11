@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "xcursor-forge"
+version = "0.1.0"
+description = "Generate styled variants (glitch, animated glitch, ...) of existing Xcursor themes"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
+dependencies = ["numpy"]
+keywords = ["xcursor", "cursor", "theme", "wayland", "niri", "linux", "ricing"]
+classifiers = [
+    "Environment :: Console",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Topic :: Desktop Environment",
+]
+
+[project.urls]
+Homepage = "https://github.com/RodrigoRosa7/xcursor-forge"
+
+[project.scripts]
+xcursor-forge = "xcursor_forge.cli:main"
+
+[tool.setuptools]
+packages = ["xcursor_forge"]
