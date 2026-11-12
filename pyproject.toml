@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "xcursor-forge"
 version = "0.1.0"
-description = "Generate styled variants (glitch, animated glitch, ...) of existing Xcursor themes"
+description = "Generate styled variants (glitch, CRT, VHS, ...) of existing Xcursor themes"
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]

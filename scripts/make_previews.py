@@ -21,6 +21,8 @@ from xcursor_forge.styles import STYLES  # noqa: E402
 
 BG = np.array([0x1A, 0x1B, 0x26, 255], np.float32) / 255
 CURSORS = ("default", "pointer", "text")
+STATIC = ("glitch", "crt", "vhs")
+ANIMATED = ("glitch-anim", "crt-anim", "vhs-anim")
 SIZE, SCALE, PAD = 48, 4, 8
 
 
@@ -42,7 +44,7 @@ def row(images: list[np.ndarray]) -> np.ndarray:
 def frames_for(base: Path, style: str, cursor: str) -> list[xcursor.Frame]:
     src = xcursor.read(base / "cursors" / cursor)
     size = min({f.size for f in src}, key=lambda s: abs(s - SIZE))
-    return [f for f in STYLES[style].render(cursor, src, 1.0) if f.size == size], \
+    return [f for f in STYLES[style].apply(cursor, src, 1.0) if f.size == size], \
         [f for f in src if f.size == size][0]
 
 
@@ -51,26 +53,29 @@ def main() -> int:
     docs = ROOT / "docs"
     docs.mkdir(exist_ok=True)
 
-    # static: original | glitch, one row per cursor
-    rows = []
-    for c in CURSORS:
-        styled, original = frames_for(base, "glitch", c)
-        rows.append(row([tile(original.rgba), tile(styled[0].rgba)]))
-    width = max(r.shape[1] for r in rows)
-    rows = [np.concatenate([r, np.tile(BG, (r.shape[0], width - r.shape[1], 1))], 1) for r in rows]
-    write_png(docs / "preview-glitch.png", np.concatenate(rows, 0))
+    # static styles: original | styled, one row per cursor
+    for style in STATIC:
+        rows = []
+        for c in CURSORS:
+            styled, original = frames_for(base, style, c)
+            rows.append(row([tile(original.rgba), tile(styled[0].rgba)]))
+        width = max(r.shape[1] for r in rows)
+        rows = [np.concatenate([r, np.tile(BG, (r.shape[0], width - r.shape[1], 1))], 1) for r in rows]
+        write_png(docs / f"preview-{style}.png", np.concatenate(rows, 0))
 
-    # animated: the three cursors side by side, frame by frame
-    anims = [frames_for(base, "glitch-anim", c)[0] for c in CURSORS]
-    with tempfile.TemporaryDirectory() as tmp:
-        args = []
-        for i in range(len(anims[0])):
-            path = Path(tmp) / f"{i:03}.png"
-            write_png(path, row([tile(a[i].rgba) for a in anims]))
-            args += ["-delay", str(max(2, anims[0][i].delay // 10)), str(path)]
-        subprocess.run(["magick", *args, "-loop", "0", str(docs / "preview-glitch-anim.gif")],
-                       check=True, stdin=subprocess.DEVNULL)
-    print("wrote docs/preview-glitch.png and docs/preview-glitch-anim.gif")
+    # animated styles: the three cursors side by side, frame by frame
+    for style in ANIMATED:
+        anims = [frames_for(base, style, c)[0] for c in CURSORS]
+        with tempfile.TemporaryDirectory() as tmp:
+            args = []
+            for i in range(len(anims[0])):
+                path = Path(tmp) / f"{i:03}.png"
+                write_png(path, row([tile(a[i].rgba) for a in anims]))
+                args += ["-delay", str(max(2, anims[0][i].delay // 10)), str(path)]
+            subprocess.run(["magick", *args, "-loop", "0", str(docs / f"preview-{style}.gif")],
+                           check=True, stdin=subprocess.DEVNULL)
+    print("wrote docs/preview-{" + ",".join(STATIC) + "}.png and docs/preview-{"
+          + ",".join(ANIMATED) + "}.gif")
     return 0
 
 
