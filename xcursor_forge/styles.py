@@ -268,7 +268,7 @@ VHS_PAD = 2.0
 VHS_REST_POS = 0.82                       # where the tracking band parks, as a fraction of height
 VHS_SWEEP = (0.66, 0.46, 0.26, 0.08)      # band positions while it travels up
 VHS_SWEEP_MS = 70
-VHS_REST_MS = 1300
+VHS_REST_MS = 900
 
 
 def vhs(rgba: np.ndarray, size: int, seed: str, intensity: float = 1.0,
@@ -351,7 +351,7 @@ def style_vhs_anim(name: str, frames: list[Frame], intensity: float, color=None)
     groups = _by_size(frames)
     out: list[Frame] = []
     if all(len(g) == 1 for g in groups.values()):
-        rest = VHS_REST_MS + _rng(name).randrange(0, 800)
+        rest = VHS_REST_MS + _rng(name).randrange(0, 400)
         for f in frames:
             out.append(render(f, rest, None))
             out += [render(f, VHS_SWEEP_MS, i) for i in range(len(VHS_SWEEP))]

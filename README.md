@@ -25,7 +25,7 @@ GNOME, KDE, X11…
 | `crt` | Monochrome phosphor monitor: tinted image, scanlines, beam smear and bloom. Green by default; try `--color ffb000` for amber. |
 | `crt-anim` | The CRT with wider, soft scanlines rolling down the cursor, like a TV filmed by a camera. |
 | `vhs` | Worn tape: soft magenta/green color fringes, washed out tones, faint scanlines and a tracking band of torn rows and white dropouts near the bottom of the cursor. |
-| `vhs-anim` | The tape at rest for a couple of seconds, then the tracking band travels up the cursor while the picture wobbles sideways. Each cursor has its own noise and beat. |
+| `vhs-anim` | The tape at rest for about a second, then the tracking band travels up the cursor while the picture wobbles sideways. Each cursor has its own noise and beat. |
 
 ## Download prebuilt themes
 
